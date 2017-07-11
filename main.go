@@ -19,7 +19,7 @@ type person struct {
 func main() {
 
 	fmt.Println("Opening connection")
-	db, err := sql.Open("mysql", "root:"+os.Getenv("mySQLPassword")+"@tcp("+os.Getenv("mySQLIPAddress")+":"+ os.Getenv("mySQLIPPort") +")/testdb")
+	db, err := sql.Open("mysql", "root:"+os.Getenv("mySQLPassword")+"@tcp("+os.Getenv("mySQLIPAddress")+":"+ os.Getenv("mySQLIPPort") +")/")
 
 	if err != nil {
 		fmt.Println("Error: ", err)
@@ -45,12 +45,23 @@ func main() {
 		City string
 	)
 
-	//// Get column names
-	columns, err := rows.Columns()
-	if err != nil {
-		panic(err.Error()) // proper error handling instead of panic in your app
+	//// Create Database if not exist
+	_, err = db.Exec("CREATE DATABASE IF NOT EXISTS testdb")
+	if err!=nil{
+		log.Fatal(err)
 	}
-	fmt.Println(columns)
+
+	//// Use our database
+	_, err = db.Exec("USE testdb")
+	if err!=nil{
+		log.Fatal(err)
+	}
+
+	//// Create Table if not exists
+	_, err = db.Exec("CREATE TABLE IF NOT EXISTS Persons (PersonID int, LastName varchar(255), FirstName varchar(255), Address varchar(255), City varchar(255));")
+	if err!=nil{
+		log.Fatal(err)
+	}
 
 	///////////// Read Operation ///////////////////
 	rowsQuery, err := db.Prepare("SELECT * FROM Persons where PersonID = ?")
@@ -68,14 +79,21 @@ func main() {
 		fmt.Println(Id, LastName, FirstName, Address, City)
 	}
 
+	//// Get column names
+	//columns, err := rows.Columns()
+	//if err != nil {
+	//	panic(err.Error()) // proper error handling instead of panic in your app
+	//}
+	//fmt.Println(columns)
+
 	//////////// Insertion ////////////////////////
 	//stmt, err := db.Prepare("INSERT INTO Persons(PersonID, LastName, FirstName, Address, City) VALUES(?,?,?,?,?)")
 	//if err != nil {
 	//	log.Fatal(err)
 	//}
-	//
-	////Single Record Addition
-	//res, err := stmt.Exec("2", "Aslam", "Atif", "ABC", "Lahore")
+
+	//Single Record Addition
+	//res, err := stmt.Exec("1", "Marley", "Bob", "ABC", "Africa")
 	//if err != nil {
 	//	log.Fatal(err)
 	//}

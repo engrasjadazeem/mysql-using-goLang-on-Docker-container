@@ -34,14 +34,3 @@ should see mySql linking to our container with IP Address
 6- Access mySql client this way
 mysql -uroot -p<mypassword> -h <mySQLIPAddress> -P <mySQLIPPort> --database=<DatabaseName>
 
-You may need to create Database or Table here are reference queries
-- CREATE DATABASE testdb
-- USE testdb
-- CREATE TABLE Persons (
-      PersonID int,
-      LastName varchar(255),
-      FirstName varchar(255),
-      Address varchar(255),
-      City varchar(255)
-  ); //Good read: https://www.w3schools.com/sql/sql_create_table.asp
-
