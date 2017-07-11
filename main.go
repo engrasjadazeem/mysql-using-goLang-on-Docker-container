@@ -58,7 +58,7 @@ func main() {
 	}
 
 	//// Create Table if not exists
-	_, err = db.Exec("CREATE TABLE IF NOT EXISTS Persons (PersonID int, LastName varchar(255), FirstName varchar(255), Address varchar(255), City varchar(255));")
+	_, err = db.Exec("CREATE TABLE IF NOT EXISTS Persons (PersonID int NOT NULL AUTO_INCREMENT, LastName varchar(255), FirstName varchar(255), Address varchar(255), City varchar(255), PRIMARY KEY (PersonID));")
 	if err!=nil{
 		log.Fatal(err)
 	}
@@ -87,29 +87,29 @@ func main() {
 	//fmt.Println(columns)
 
 	//////////// Insertion ////////////////////////
-	//stmt, err := db.Prepare("INSERT INTO Persons(PersonID, LastName, FirstName, Address, City) VALUES(?,?,?,?,?)")
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
+	stmt, err := db.Prepare("INSERT INTO Persons(LastName, FirstName, Address, City) VALUES(?,?,?,?)")
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	//Single Record Addition
-	//res, err := stmt.Exec("1", "Marley", "Bob", "ABC", "Africa")
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
+	// Single Record Addition
+	res, err := stmt.Exec("Khalid", "Butt", "ABC", "Lahore")
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	// For MultiInsertion Case struct can be use that can be dumped with data from any source like: var persons = []person{}
 
-	//META
-	//lastId, err := res.LastInsertId()
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//rowCnt, err := res.RowsAffected()
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//log.Printf("ID = %d, affected = %d\n", lastId, rowCnt)
+	// META
+	lastId, err := res.LastInsertId()
+	if err != nil {
+		log.Fatal(err)
+	}
+	rowCnt, err := res.RowsAffected()
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Printf("ID = %d, affected = %d\n", lastId, rowCnt)
 
 	///////////// Delete a Record ////////////////
 	//_, err = db.Exec("DELETE FROM Persons where PersonID = ?", 2)  // OK
