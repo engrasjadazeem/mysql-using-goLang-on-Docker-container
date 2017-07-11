@@ -1,6 +1,9 @@
 # mysql-using-goLang-on-Docker-container
 mysql dbconectivity used in goLang to run db operations in Docker container using Docker file for basic CRUD operations
 
+Target
+Our target is to setup mysql and create database named 'testdb' with table 'Persons' in it.
+
 Reference
 https://github.com/go-sql-driver/mysql
 
